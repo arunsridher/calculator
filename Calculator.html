@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <style>
+        #calculator{
+            width:380px;
+            height:480px;
+            background-color:#F1F1F1;
+            margin:100px auto;
+            padding:1%;
+        }
+
+        #heading{
+            width:100%;
+            height: 15%;
+        }
+
+        #name{
+            width:100%;
+            height:80%;
+            margin:1% 0px;
+            background-color:black;
+            text-align:center;
+            color:white;
+            font-size:1.5rem;
+            font-weight:bold;
+            line-height:50px;
+        }
+
+        #display{
+            width:100%;
+            height:15%;
+            background-color:#fbfbfb;
+        }
+
+        #screen{
+            margin-top: 0px;
+            padding: 35px 5px 0px;
+            font-size: 1.5rem;
+            text-align: right;
+        }
+        #touch-pad{
+            width:100%;
+            height:68%;
+            margin-top:2%;
+        }
+
+        .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        }
+
+        .grid-item {
+        background-color: white;
+        border: 1px solid whitesmoke;
+        padding: 20px;
+        font-size: 20px;
+        text-align: center;
+        }
+
+        #zero{
+            grid-column: span 2;
+        }
+
+        .operators{
+            background-color: #cb4154;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+	<div id="calculator">
+        <div id="heading">
+            <div id="name">
+                CALCULATOR
+            </div>
+        </div>
+        <div id="display"> 
+            <p id="screen">
+                
+            </p>
+        </div>
+        <div id="touch-pad">
+            <div class="grid-container">
+                <div class="grid-item" data-value="AC">AC</div>
+  				<div class="grid-item" data-value="">+/-</div>
+  				<div class="grid-item" data-value="%">%</div>
+                <div class="grid-item operators"  data-value="/">/</div>
+				<div class="grid-item"  data-value="7">7</div>
+  				<div class="grid-item"  data-value="8">8</div>
+  				<div class="grid-item"  data-value="9">9</div>  
+                <div class="grid-item operators" data-value="*">*</div>
+  				<div class="grid-item" data-value="4">4</div>
+  				<div class="grid-item" data-value="5">5</div>
+  				<div class="grid-item" data-value="6">6</div>  
+                <div class="grid-item operators" data-value="-">-</div>
+  				<div class="grid-item" data-value="1">1</div>
+  				<div class="grid-item" data-value="2">2</div>
+  				<div class="grid-item" data-value="3">3</div>  
+                <div class="grid-item operators" data-value="+">+</div>
+                <div id="zero" class="grid-item" data-value="0">0</div>
+  				<div class="grid-item" data-value=".">.</div>  
+                <div class="grid-item operators" data-value="=">=</div>
+			</div>
+        </div>
+    </div>
+
+
+    <script>
+        var buttons = document.getElementsByClassName("grid-item");
+        var screen = document.getElementById("screen");
+        var operand1 = 0;
+        var operand2 = null;
+        var operator = null;
+
+        for(var i = 0; i < buttons.length; i++){
+            buttons[i].addEventListener('click', function(){
+                var value = this.getAttribute("data-value");
+                if(value >= 0 && value <= 9){
+                    screen.innerHTML += value;
+                    if(operand1 != null && operator != null){
+                        operand2 = screen.innerHTML;
+                    }
+                }
+                if(value == "."){
+                    screen.innerHTML += value;
+                }
+                else if(value == "/" || value == "*" || value == "-" || value == "+" || value == "%"){
+                    if(operand1 != null && operator != null && operand2 != null){
+                        var res = eval(operand1 + operator + operand2);
+                        reset();
+                        screen.innerHTML = res;
+                    }
+                    else{
+                        operand1 = screen.innerHTML;
+                        screen.innerHTML = "";
+                        operator = value;
+                    }
+                }
+                else if(value == "="){
+                    if(operand1 == null)
+                        return;
+                    
+                    operand2 = screen.innerHTML;
+                    var res = eval(operand1 + operator + operand2);
+                    reset();
+                    screen.innerHTML = res;
+                }
+                else if(value == "AC"){
+                    screen.innerHTML = "";
+                    reset();
+                }
+            });
+        }
+
+        function reset(){
+            operand1 = null;
+            operand2 = null;
+            operator = null;
+        }
+    </script>
+</body>
+</html>
